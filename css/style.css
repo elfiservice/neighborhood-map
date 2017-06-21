@@ -5,7 +5,49 @@ body {
     color: #727475;
 }
 
+.container-map {
+    height: 100%;
+    position: relative;
+}
 
+#map {
+  bottom:0px;
+  height: 100%;
+  left: 0px;
+  position: absolute;
+  right: 0px;
+}
+
+.list-box {
+  background: #101010;
+  color: #fff;
+  border: 1px solid #999;
+  border-radius: 3px;
+  height: 100%;
+  line-height: 35px;
+  padding: 60px 10px 30px 10px;
+  text-align: left;
+  width: 199px;
+  z-index: 10;
+  position: absolute;
+  /* This trasform moves the drawer off canvas. */
+  -webkit-transform: translate(-300px, 0);
+  transform: translate(-300px, 0);
+  /* Optionally, we animate the drawer. */
+  transition: transform 0.3s ease;
+}
+
+.list-box.open {
+    -webkit-transform: translate(14px, 0);
+    transform: translate(14px, 0);
+}
+
+.close-list-box {
+  cursor: pointer;
+  padding: 0 10px 0 0;
+  float: right;
+  color: #e45e5e;
+}
 
 @media screen and (max-width: 767px) {
     .navbar-form {
