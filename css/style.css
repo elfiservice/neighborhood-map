@@ -7,6 +7,16 @@ body {
 
 
 
-@media screen and (min-width: 992px) {
-
+@media screen and (max-width: 767px) {
+    .navbar-form {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-left: 30px;
+    }
+    .btn-default {
+        margin-left: 10px;
+    }
+    .navbar-form .form-group {
+    float: left;
+    }
 }
