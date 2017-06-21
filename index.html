@@ -25,9 +25,9 @@
               </button>
               <div class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Search">
+                  <input id="search-input" type="text" class="form-control" placeholder="Search">
                 </div>
-                <button class="btn btn-go">Go</button>
+                <button id="go-btn" class="btn btn-go" data-bind="click: openListContainer">Go</button>
               </div>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -45,10 +45,13 @@
         </nav>
         <div class="row container-map">
             <div class="list-box">
-              <div class="close-list-box">
+              <button id="close-btn" class="close-list-box-btn" data-bind="click: closeListContainer">
               X
+            </button>
+            <div class="list-box-content">
+              <ul id="list-of-places"></ul>
             </div>
-            texto vai aqui
+
           </div>
                 <div id="map"></div>
         </div>
