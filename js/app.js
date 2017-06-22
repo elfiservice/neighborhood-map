@@ -185,6 +185,11 @@ function initMap() {
 
     elements.btnGoElemt.addEventListener('click', textSearchPlaces);
 
+    // Listen for the event fired when the user selects a prediction from the
+    // picklist and retrieve more details for that place.
+      // searchBox.addListener('places_changed', function() {
+      //   searchBoxPlaces(this);
+      // });
 
 }
 
@@ -251,8 +256,18 @@ function hideMarkers(markers) {
   }
 }
 
+// function searchBoxPlaces(searchBox) {
+//   hideMarkers(placeMarkers);
+//   var places = searchBox.getPlaces();
+//   if (places.length == 0) {
+//     window.alert('We did not find any places matching that search!');
+//   } else {
+//   // For each place, get the icon, name and location.
+//     createMarkersForPlaces(places);
+//   }
+// }
+
 function textSearchPlaces() {
-  console.log(elements.searchElemt);
 
   var bounds = map.getBounds();
   hideMarkers(placeMarkers);
@@ -273,9 +288,6 @@ function createMarkersForPlaces(places) {
   for (var i = 0; i < places.length; i++) {
     var place = places[i];
 
-    //add places to List dom
-    $('#list-of-places').append("<li>" + place.name + " </li>");
-
     var icon = {
       url: place.icon,
       size: new google.maps.Size(35, 35),
@@ -289,13 +301,32 @@ function createMarkersForPlaces(places) {
       icon: icon,
       title: place.name,
       position: place.geometry.location,
-      id: place.id
+      id: place.place_id
     });
-    // If a marker is clicked, do a place details search on it in the next function.
+
+    //add places to List dom
+    $('#list-of-places').append('<li id="' + place.place_id + '" data-bind="click: showDetails">' + place.name + ' </li>');
+
+    // Create a single infowindow to be used with the place details information
+    // so that only one is open at once.
+    var placeInfoWindow = new google.maps.InfoWindow();
+
+    //When clicked on the place in List of Places Show Details on the Marker
+    $('ul#list-of-places #' + place.place_id).click(function(x){
+      getPlacesDetailsFromList(x.currentTarget.id, placeInfoWindow);
+    });
+
+    //when cliked on teh Marker show Details about him
     marker.addListener('click', function() {
-    getPlacesDetails(this, place);
+      if (placeInfoWindow.marker == this) {
+        console.log("This infowindow already is on this marker!");
+      } else {
+        getPlacesDetails(this, placeInfoWindow);
+      }
     });
+
     placeMarkers.push(marker);
+
     if (place.geometry.viewport) {
       // Only geocodes have viewport.
       bounds.union(place.geometry.viewport);
@@ -304,21 +335,74 @@ function createMarkersForPlaces(places) {
     }
   }
   map.fitBounds(bounds);
+
 }
 
+//show Details when clicked in any place from the List os Places
+function getPlacesDetailsFromList (idMarker, infowindow) {
+  var service = new google.maps.places.PlacesService(map);
+
+  for (var i = 0; i < placeMarkers.length; i++) {
+    if( placeMarkers[i].id === idMarker ) {
+      var marker = placeMarkers[i];
+    }
+  }
+
+  service.getDetails({
+    placeId: idMarker
+
+  }, function(place, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      // Set the marker property on this infowindow so it isn't created again.
+      infowindow.marker = marker;
+      var innerHTML = '<div>';
+      if (place.name) {
+        innerHTML += '<strong>' + place.name + '</strong>';
+      }
+      if (place.formatted_address) {
+        innerHTML += '<br>' + place.formatted_address;
+      }
+      if (place.formatted_phone_number) {
+        innerHTML += '<br>' + place.formatted_phone_number;
+      }
+      if (place.opening_hours) {
+        innerHTML += '<br><br><strong>Hours:</strong><br>' +
+            place.opening_hours.weekday_text[0] + '<br>' +
+            place.opening_hours.weekday_text[1] + '<br>' +
+            place.opening_hours.weekday_text[2] + '<br>' +
+            place.opening_hours.weekday_text[3] + '<br>' +
+            place.opening_hours.weekday_text[4] + '<br>' +
+            place.opening_hours.weekday_text[5] + '<br>' +
+            place.opening_hours.weekday_text[6];
+      }
+      if (place.photos) {
+        innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
+            {maxHeight: 100, maxWidth: 200}) + '">';
+      }
+      innerHTML += '</div>';
+
+      infowindow.setContent(innerHTML);
+      infowindow.open(map, marker);
+      // Make sure the marker property is cleared if the infowindow is closed.
+      infowindow.addListener('closeclick', function() {
+        infowindow.marker = null;
+      });
+    }
+  });
+
+}
+
+//show details when clicked on the any Marker on the map
 function getPlacesDetails(marker, infowindow) {
-console.log(marker, infowindow);
   var service = new google.maps.places.PlacesService(map);
 
   service.getDetails({
     placeId: marker.id
 
   }, function(place, status) {
-    console.log(status, place);
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       // Set the marker property on this infowindow so it isn't created again.
       infowindow.marker = marker;
-      console.log(infowindow, place);
       var innerHTML = '<div>';
       if (place.name) {
         innerHTML += '<strong>' + place.name + '</strong>';
@@ -369,6 +453,11 @@ var ViewModel = function() {
   this.closeListContainer = function(){
     listBox.removeClass('open');
   };
+
+  this.showDetails = function(){
+    console.log("oi");
+  };
+
 }
 
 ko.applyBindings(new ViewModel());
