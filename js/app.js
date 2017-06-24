@@ -9,7 +9,7 @@ var viewModel = {
     this.visibleMenu(false);
   },
   locations: octupus.getDefaltsLocations(),
-  searchBox: ko.observable(''),
+  searchBox: ko.observable('')
 
 
 
@@ -32,6 +32,6 @@ viewModel.placeList = ko.computed(function() {
 
 viewModel.setPlaceMarker = function(placeClicked){
     populateInfoWindow(placeClicked.markerGoogle, largeInfowindow);
-}
+};
 
 ko.applyBindings(viewModel);
