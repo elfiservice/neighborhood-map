@@ -215,9 +215,28 @@ function populateInfoWindow(marker, infowindow) {
 
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
-    // Clear the infowindow content to give the streetview time to load.
-    infowindow.setContent(marker.title);
+
+    //set some Animation when MArker has cliked
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() {
+        marker.setAnimation(null);
+      }, 700);
+
+    var content = '<h4>' + marker.title + '</h4>' +
+    '<h6> Some Tips </h6> <ul id="tips-places"></ul>';
+    infowindow.setContent(content);
     infowindow.marker = marker;
+    //Get some TIPs from Foursquare API
+    $.getJSON('https://api.foursquare.com/v2/tips/search?v=20161016&ll=-3.738977%2C-38.539653&query=' + marker.title + '&limit=4&intent=match&client_id=AHDCBP0X3W1DX4IFXXXLDNFGWEOVFQVN1ZA4FMSX44YHO4X5&client_secret=44OKE3QF1REUWL5GB4V222BXW3CHRMO3OY4WQZJMIIHP1GRK',
+        function(data) {
+            $.each(data.response.tips, function(i,tip){
+                content2 = '<li>' + tip.text + ' - ♥ ' + tip.likes.count + ' </li>';
+                  $(content2).appendTo("#tips-places");
+              
+          });
+    });
+
+
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;

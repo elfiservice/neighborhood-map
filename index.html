@@ -17,9 +17,10 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
           <div class="container">
             <div class="navbar-header">
+              <div style="float: left">NF</div>
               <div class="navbar-form navbar-left" role="search">
                 <div class="form-group">
-                  <input id="search-input" data-bind="click: openListContainer" type="text" class="form-control" placeholder="Search">
+                  <input id="search-input" data-bind="click: openListContainer, value: searchBox, valueUpdate: 'keyup'" type="text" class="form-control" placeholder="Filter">
                 </div>
               </div>
             </div>
@@ -28,13 +29,11 @@
         <div class="row container-map" >
             <div class="list-box" data-bind="css: { 'open': visibleMenu }">
               <button id="close-btn" class="close-list-box-btn" data-bind="click: openListContainer">
-              X
-            </button>
+                X
+              </button>
             <div class="list-box-content">
               <ul id="list-of-places" data-bind="foreach: placeList">
-                <li data-bind="text: title, click: $parent.setPlaceMarker">
-
-                </li>
+                <li data-bind="text: title, click: $parent.setPlaceMarker"> </li>
               </ul>
             </div>
 

@@ -5,13 +5,27 @@ var viewModel = {
   openListContainer: function() {
     this.visibleMenu(!this.visibleMenu());
   },
-  locations: octupus.getDefaltsLocations()
+  locations: octupus.getDefaltsLocations(),
+  searchBox: ko.observable(''),
 
 
 
 };
 
-viewModel.placeList = ko.observableArray(viewModel.locations);
+viewModel.placeList = ko.computed(function() {
+        var self = this;
+        var searchResult = this.searchBox().toLowerCase();
+
+        return ko.utils.arrayFilter(self.locations, function(markerLocation) {
+            var title = markerLocation.title.toLowerCase();
+            var matched = title.indexOf(searchResult) >= 0;
+            var marker = markerLocation.markerGoogle;
+            if (marker) {
+                marker.setVisible(matched);
+            } 
+            return matched;
+        });
+    }, viewModel);
 
 viewModel.setPlaceMarker = function(placeClicked){
     populateInfoWindow(placeClicked.markerGoogle, largeInfowindow);
