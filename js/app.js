@@ -3,7 +3,10 @@
 var viewModel = {
   visibleMenu: ko.observable(false),
   openListContainer: function() {
-    this.visibleMenu(!this.visibleMenu());
+    this.visibleMenu(true);
+  },
+  closeListContainer: function() {
+    this.visibleMenu(false);
   },
   locations: octupus.getDefaltsLocations(),
   searchBox: ko.observable(''),

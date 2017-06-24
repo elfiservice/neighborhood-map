@@ -139,6 +139,7 @@ var markers = [];
 var elements = octupus.getDomElements();
 
 function initMap() {
+
   var neighborhood = octupus.getNeighborhood();
   var mapConfig = octupus.getMapConfig();
 
@@ -191,8 +192,6 @@ function initMap() {
       map.fitBounds(bounds);
 
   }
-
-
 }
 
 //functions
@@ -215,7 +214,7 @@ function populateInfoWindow(marker, infowindow) {
 
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
-
+    
     //set some Animation when MArker has cliked
     marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function() {
@@ -234,7 +233,12 @@ function populateInfoWindow(marker, infowindow) {
                   $(content2).appendTo("#tips-places");
               
           });
-    });
+    }).fail(function( jqxhr, textStatus, error ) {
+        var err = textStatus + ", " + error;
+          content2 = '<li> Oops! Something wrong occured, sorry just try again :) </li>';
+          $(content2).appendTo("#tips-places");
+        console.log( "Request Failed: " + err );
+      });;
 
 
     // Make sure the marker property is cleared if the infowindow is closed.
