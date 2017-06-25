@@ -1,6 +1,8 @@
 
+html, body { height: 100%; margin: 0; padding: 0; }
+
 body {
-    font-family: 'Titillium Web', sans-serif;
+    font-family: "Titillium Web", sans-serif;
     font-weight: 600;
     color: #727475;
 }
@@ -11,30 +13,36 @@ body {
 }
 
 #map {
-  bottom:0px;
-  height: 100%;
-  left: 0px;
-  position: absolute;
-  right: 0px;
+    bottom:0px;
+    height: 100%;
+    left: 0px;
+    position: absolute;
+    right: 0px;
+}
+
+.site-name {
+    float: left; 
+    padding-top: 10px; 
+    font-size: 1.5em
 }
 
 .list-box {
-  background: #101010;
-  color: #fff;
-  border: 1px solid #999;
-  border-radius: 3px;
-  height: 100%;
+    background: #101010;
+    color: #fff;
+    border: 1px solid #999;
+    border-radius: 3px;
+    height: 100%;
 
-  padding: 60px 10px 30px 10px;
-  text-align: left;
-  width: 199px;
-  z-index: 10;
-  position: absolute;
-  /* This trasform moves the drawer off canvas. */
-  -webkit-transform: translate(-300px, 0);
-  transform: translate(-300px, 0);
-  /* Optionally, we animate the drawer. */
-  transition: transform 0.3s ease;
+    padding: 60px 10px 30px 10px;
+    text-align: left;
+    width: 199px;
+    z-index: 10;
+    position: absolute;
+    /* This trasform moves the drawer off canvas. */
+    -webkit-transform: translate(-300px, 0);
+    transform: translate(-300px, 0);
+    /* Optionally, we animate the drawer. */
+    transition: transform 0.3s ease;
     overflow-y: scroll;
 }
 
@@ -44,25 +52,24 @@ body {
 }
 
 .list-box-content {
-  width: 80%;
-
+    width: 80%;
 }
 
 .close-list-box-btn {
-  cursor: pointer;
-  float: right;
-  color: #e45e5e;
+    cursor: pointer;
+    float: right;
+    color: #e45e5e;
 }
 
 #list-of-places {
-  list-style: none;
-  padding-left: 10px;
+    list-style: none;
+    padding-left: 10px;
 }
 
 #list-of-places li {
-  padding: 10px 0;
-  border-bottom: 1px #e45e5e dotted;
-  cursor: pointer;
+    padding: 10px 0;
+    border-bottom: 1px #e45e5e dotted;
+    cursor: pointer;
 }
 
 
@@ -76,6 +83,6 @@ body {
         margin-left: 10px;
     }
     .navbar-form .form-group {
-    float: left;
+        float: left;
     }
 }

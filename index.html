@@ -8,46 +8,41 @@
     <link href="https://fonts.googleapis.com/css?family=Lato|Open+Sans|Titillium+Web:100,300,600" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <style type="text/css">
-  html, body { height: 100%; margin: 0; padding: 0; }
-  #map { height: 100%; }
-</style>
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-          <div class="container">
+        <div class="container">
             <div class="navbar-header">
-              <div style="float: left; padding-top: 10px; font-size: 1.5em">N.F.T</div>
-              <div class="navbar-form navbar-left" role="search">
-                <div class="form-group">
-                  <input id="search-input" data-bind="click: openListContainer, value: searchBox, valueUpdate: 'keyup'" type="text" class="form-control" placeholder="Filter">
+                <div class="site-name">N.F.T</div>
+                <div class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input id="search-input" data-bind="click: openListContainer, value: searchBox, valueUpdate: 'keyup'" type="text" class="form-control" placeholder="Filter">
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </nav>
-        <div class="row container-map" >
-            <div class="list-box" data-bind="css: { 'open': visibleMenu }">
-              <button id="close-btn" class="close-list-box-btn" data-bind="click: closeListContainer">
-                X
-              </button>
-            <div class="list-box-content">
-              <ul id="list-of-places" data-bind="foreach: placeList">
-                <li data-bind="text: title, click: $parent.setPlaceMarker"> </li>
-              </ul>
-            </div>
-
-          </div>
-          <div id="map"></div>
         </div>
+    </nav>
+    <div class="row container-map" >
+        <aside class="list-box" data-bind="css: { 'open': visibleMenu }">
+            <button id="close-btn" class="close-list-box-btn" data-bind="click: closeListContainer">
+                X
+            </button>
+            <div class="list-box-content">
+                <ul id="list-of-places" data-bind="foreach: placeList">
+                    <li data-bind="text: title, click: $parent.setPlaceMarker"> </li>
+                </ul>
+            </div>
+        </aside>
+        <main id="map"></main>
+    </div>
 
-            <script src="js/lib/jquery.js"></script>
-            <script src="js/lib/bootstrap.min.js"></script>
-            <script src="js/lib/knockout.js"></script>
-            <script src="js/map.js"></script>
-            <script src="js/app.js"></script>
-            <script async defer
-                src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCOFng3S8wkDSaA9PvWjQcY2dFcdN2ATzE&v=3&callback=initMap">
-            </script>
+    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/knockout.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/app.js"></script>
+    <script async defer onerror="mapError()"
+        src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry&key=AIzaSyCOFng3S8wkDSaA9PvWjQcY2dFcdN2ATzE&v=3&callback=initMap">
+    </script>
 </body>
 </html>

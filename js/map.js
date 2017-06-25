@@ -12,7 +12,7 @@ var Marker = function(data) {
 
 var model = {
   neighborhood: {
-    lat:  -3.739844,
+    lat: -3.739844,
     lng: -38.540374
   },
   mapConfig: {
@@ -92,13 +92,10 @@ var model = {
     {title: 'Complexo Ktorze Estudio', location: {lat: -3.738676,  lng: -38.541996 }},
     {title: 'Pracinha da Gentilandia', location: {lat: -3.743473,  lng: -38.537072 }}
   ]
-
-
 };
 
 var octupus = {
   init: function(){
-    view.init();
   },
   getNeighborhood: function(){
     return model.neighborhood;
@@ -114,21 +111,16 @@ var octupus = {
     model.locations.forEach(function(marker){
       defaultLocations.push(new Marker(marker) );
     });
-
     return defaultLocations;
   }
 };
 
 var view = {
   domElements: {
-      mapElemt: $('#map')[0],
-      searchElemt: $('#search-input')[0],
-      btnGoElemt: $('#go-btn')[0]
-
-    },
-    init: function() {
-
-    }
+    mapElemt: $('#map')[0],
+    searchElemt: $('#search-input')[0],
+    btnGoElemt: $('#go-btn')[0]
+  }
 };
 
 octupus.init();
@@ -143,53 +135,52 @@ function initMap() {
   var neighborhood = octupus.getNeighborhood();
   var mapConfig = octupus.getMapConfig();
 
-  // console.log(document.getElementById('map'), $('#map')[0], elements.mapElemt);
-    // Constructor creates a new map - only center and zoom are required.
-    map = new google.maps.Map(elements.mapElemt, {
-      center: neighborhood,
-      zoom: mapConfig.zoom,
-      styles: mapConfig.styles,
-      mapTypeControl: mapConfig.mapTypeControl
-    });
-    bounds = new google.maps.LatLngBounds();
-    largeInfowindow = new google.maps.InfoWindow();
+  // Constructor creates a new map - only center and zoom are required.
+  map = new google.maps.Map(elements.mapElemt, {
+    center: neighborhood,
+    zoom: mapConfig.zoom,
+    styles: mapConfig.styles,
+    mapTypeControl: mapConfig.mapTypeControl
+  });
+  bounds = new google.maps.LatLngBounds();
+  largeInfowindow = new google.maps.InfoWindow();
   // Style the markers a bit. This will be our listing marker icon.
-   defaultIcon = makeMarkerIcon('0091ff');
-   highlightedIcon = makeMarkerIcon('FFFF24');
+  defaultIcon = makeMarkerIcon('0091ff');
+  highlightedIcon = makeMarkerIcon('FFFF24');
 
   // The following group uses the location array to create an array of markers on initialize.
   for (var i = 0; i < viewModel.locations.length; i++) {
-      // Get the position from the location array.
-      var selfLocation = viewModel.locations[i];
-      var position = selfLocation.location;
-      var title = selfLocation.title;
+    // Get the position from the location array.
+    var selfLocation = viewModel.locations[i];
+    var position = selfLocation.location;
+    var title = selfLocation.title;
 
-      // Create a marker per location, and put into markers array.
-      selfLocation.markerGoogle = new google.maps.Marker({
-        position: position,
-        title: title,
-        animation: google.maps.Animation.DROP,
-        icon: defaultIcon,
-        id: i
-      });
+    // Create a marker per location, and put into markers array.
+    selfLocation.markerGoogle = new google.maps.Marker({
+      position: position,
+      title: title,
+      animation: google.maps.Animation.DROP,
+      icon: defaultIcon,
+      id: i
+    });
 
-      // Create an onclick event to open the large infowindow at each marker.
-      selfLocation.markerGoogle.addListener('click', function() {
-        populateInfoWindow(this, largeInfowindow);
-      });
-      // Two event listeners - one for mouseover, one for mouseout,
-      // to change the colors back and forth.
-      selfLocation.markerGoogle.addListener('mouseover', function() {
-        this.setIcon(highlightedIcon);
-        populateInfoWindow(this, largeInfowindow);
-      });
-      selfLocation.markerGoogle.addListener('mouseout', function() {
-        this.setIcon(defaultIcon);
-      });
+    // Create an onclick event to open the large infowindow at each marker.
+    selfLocation.markerGoogle.addListener('click', function() {
+      populateInfoWindow(this, largeInfowindow);
+    });
+    // Two event listeners - one for mouseover, one for mouseout,
+    // to change the colors back and forth.
+    selfLocation.markerGoogle.addListener('mouseover', function() {
+      this.setIcon(highlightedIcon);
+      populateInfoWindow(this, largeInfowindow);
+    });
+    selfLocation.markerGoogle.addListener('mouseout', function() {
+      this.setIcon(defaultIcon);
+    });
 
-      selfLocation.markerGoogle.setMap(map);
-      bounds.extend(selfLocation.markerGoogle.position);
-      map.fitBounds(bounds);
+    selfLocation.markerGoogle.setMap(map);
+    bounds.extend(selfLocation.markerGoogle.position);
+    map.fitBounds(bounds);
 
   }
 }
@@ -220,26 +211,22 @@ function populateInfoWindow(marker, infowindow) {
       setTimeout(function() {
         marker.setAnimation(null);
       }, 700);
-
-    var content = '<h4>' + marker.title + '</h4>' +
-    '<h6> Some Tips </h6> <ul id="tips-places"></ul>';
-    infowindow.setContent(content);
-    infowindow.marker = marker;
+    
     //Get some TIPs from Foursquare API
     $.getJSON('https://api.foursquare.com/v2/tips/search?v=20161016&ll=-3.738977%2C-38.539653&query=' + marker.title + '&limit=4&intent=match&client_id=AHDCBP0X3W1DX4IFXXXLDNFGWEOVFQVN1ZA4FMSX44YHO4X5&client_secret=44OKE3QF1REUWL5GB4V222BXW3CHRMO3OY4WQZJMIIHP1GRK',
-        function(data) {
-            $.each(data.response.tips, function(i,tip){
-                content2 = '<li>' + tip.text + ' - ♥ ' + tip.likes.count + ' </li>';
-                  $(content2).appendTo("#tips-places");
-              
-          });
-    }).fail(function( jqxhr, textStatus, error ) {
+      function(data) {
+        var cont = '<h4>' + marker.title + '</h4>' + '<h6> Some Tips </h6>' + '<ul id="tips-places">';
+        $.each(data.response.tips, function(i,tip){
+          cont += '<li>' + tip.text + ' - ♥ ' + tip.likes.count + ' </li>';
+        });
+        cont += '<ul>';
+        infowindow.setContent(cont);
+      }).fail(function( jqxhr, textStatus, error ) {
         var err = textStatus + ", " + error;
-          content2 = '<li> Oops! Something wrong occured, sorry just try again :) </li>';
-          $(content2).appendTo("#tips-places");
+        infowindow.setContent('<h4>' + marker.title + '</h4>' + '<h6> Some Tips </h6>' + '<ul id="tips-places">'+'<li> Oops! Something wrong occured, sorry just try again :) </li></ul>');
         console.log( "Request Failed: " + err );
-      });;
-
+      });
+    infowindow.marker = marker;
 
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
@@ -249,6 +236,7 @@ function populateInfoWindow(marker, infowindow) {
     // Open the infowindow on the correct marker.
     infowindow.open(map, marker);
     map.fitBounds(bounds);
+    map.panTo(marker.getPosition());
   }
 }
 
@@ -257,4 +245,8 @@ function hideMarkers(markers) {
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
   }
+}
+
+function mapError() {
+  alert("Opss! An error occurred while trying to load the Map. Please try again later! :)");
 }
